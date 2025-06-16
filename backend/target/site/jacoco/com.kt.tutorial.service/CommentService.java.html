@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CommentService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">kt-tutorial</a> &gt; <a href="index.source.html" class="el_package">com.kt.tutorial.service</a> &gt; <span class="el_source">CommentService.java</span></div><h1>CommentService.java</h1><pre class="source lang-java linenums">package com.kt.tutorial.service;
+
+import com.kt.tutorial.dto.CommentDTO;
+import com.kt.tutorial.model.Comment;
+import com.kt.tutorial.model.Project;
+import com.kt.tutorial.model.User;
+import com.kt.tutorial.repository.CommentRepository;
+import com.kt.tutorial.repository.ProjectRepository;
+import com.kt.tutorial.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Service
+<span class="nc" id="L18">@RequiredArgsConstructor</span>
+public class CommentService {
+    private final CommentRepository commentRepository;
+    private final ProjectRepository projectRepository;
+    private final UserRepository userRepository;
+
+    @Transactional
+    public CommentDTO createComment(CommentDTO commentDTO) {
+<span class="nc" id="L26">        Project project = projectRepository.findById(commentDTO.getProjectId())</span>
+<span class="nc" id="L27">                .orElseThrow(() -&gt; new RuntimeException(&quot;Project not found&quot;));</span>
+<span class="nc" id="L28">        User author = userRepository.findById(commentDTO.getAuthorId())</span>
+<span class="nc" id="L29">                .orElseThrow(() -&gt; new RuntimeException(&quot;User not found&quot;));</span>
+
+<span class="nc" id="L31">        Comment comment = new Comment();</span>
+<span class="nc" id="L32">        comment.setContent(commentDTO.getContent());</span>
+<span class="nc" id="L33">        comment.setProject(project);</span>
+<span class="nc" id="L34">        comment.setAuthor(author);</span>
+
+<span class="nc" id="L36">        Comment savedComment = commentRepository.save(comment);</span>
+<span class="nc" id="L37">        return convertToDTO(savedComment);</span>
+    }
+
+    @Transactional(readOnly = true)
+    public List&lt;CommentDTO&gt; getCommentsByProject(Long projectId) {
+<span class="nc" id="L42">        return commentRepository.findByProjectId(projectId).stream()</span>
+<span class="nc" id="L43">                .map(this::convertToDTO)</span>
+<span class="nc" id="L44">                .collect(Collectors.toList());</span>
+    }
+
+    @Transactional
+    public CommentDTO updateComment(Long id, CommentDTO commentDTO) {
+<span class="nc" id="L49">        Comment comment = commentRepository.findById(id)</span>
+<span class="nc" id="L50">                .orElseThrow(() -&gt; new RuntimeException(&quot;Comment not found&quot;));</span>
+
+<span class="nc bnc" id="L52" title="All 2 branches missed.">        if (!comment.getAuthor().getId().equals(commentDTO.getAuthorId())) {</span>
+<span class="nc" id="L53">            throw new RuntimeException(&quot;User is not authorized to update this comment&quot;);</span>
+        }
+
+<span class="nc" id="L56">        comment.setContent(commentDTO.getContent());</span>
+<span class="nc" id="L57">        Comment updatedComment = commentRepository.save(comment);</span>
+<span class="nc" id="L58">        return convertToDTO(updatedComment);</span>
+    }
+
+    @Transactional
+    public void deleteComment(Long id) {
+<span class="nc" id="L63">        commentRepository.deleteById(id);</span>
+<span class="nc" id="L64">    }</span>
+
+    private CommentDTO convertToDTO(Comment comment) {
+<span class="nc" id="L67">        CommentDTO dto = new CommentDTO();</span>
+<span class="nc" id="L68">        dto.setId(comment.getId());</span>
+<span class="nc" id="L69">        dto.setContent(comment.getContent());</span>
+<span class="nc" id="L70">        dto.setProjectId(comment.getProject().getId());</span>
+<span class="nc" id="L71">        dto.setAuthorId(comment.getAuthor().getId());</span>
+<span class="nc" id="L72">        dto.setAuthorName(comment.getAuthor().getName());</span>
+<span class="nc" id="L73">        dto.setCreatedAt(comment.getCreatedAt());</span>
+<span class="nc" id="L74">        dto.setUpdatedAt(comment.getUpdatedAt());</span>
+<span class="nc" id="L75">        return dto;</span>
+    }
+} 
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

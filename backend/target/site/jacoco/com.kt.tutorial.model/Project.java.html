@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Project.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">kt-tutorial</a> &gt; <a href="index.source.html" class="el_package">com.kt.tutorial.model</a> &gt; <span class="el_source">Project.java</span></div><h1>Project.java</h1><pre class="source lang-java linenums">package com.kt.tutorial.model;
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import lombok.Data;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+<span class="pc bnc" id="L14" title="All 110 branches missed.">@Data</span>
+@Entity
+@Table(name = &quot;projects&quot;)
+@EntityListeners(AuditingEntityListener.class)
+public class Project {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @NotBlank
+    @Column(nullable = false)
+    private String name;
+
+    @Column(columnDefinition = &quot;TEXT&quot;)
+    private String overview;
+
+    @Column(columnDefinition = &quot;TEXT&quot;)
+    private String architectureDiagram;
+
+    @Column(columnDefinition = &quot;TEXT&quot;)
+    private String businessRequirements;
+
+    @Column(columnDefinition = &quot;TEXT&quot;)
+    private String technicalDocumentation;
+
+    @Column(columnDefinition = &quot;TEXT&quot;)
+    private String apiDocumentation;
+
+    @Column(columnDefinition = &quot;TEXT&quot;)
+    private String setupInstructions;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private ProjectStage stage;
+
+<span class="fc" id="L49">    @ManyToMany</span>
+    @JoinTable(
+        name = &quot;project_employees&quot;,
+        joinColumns = @JoinColumn(name = &quot;project_id&quot;),
+        inverseJoinColumns = @JoinColumn(name = &quot;user_id&quot;)
+    )
+    private List&lt;User&gt; assignedEmployees = new ArrayList&lt;&gt;();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = &quot;project_manager_id&quot;, nullable = false)
+    private User projectManager;
+
+    @CreatedDate
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @LastModifiedDate
+    @Column(nullable = false)
+    private LocalDateTime updatedAt;
+
+    @PrePersist
+    protected void onCreate() {
+<span class="nc" id="L71">        createdAt = LocalDateTime.now();</span>
+<span class="nc" id="L72">        updatedAt = LocalDateTime.now();</span>
+<span class="nc" id="L73">    }</span>
+
+    @PreUpdate
+    protected void onUpdate() {
+<span class="nc" id="L77">        updatedAt = LocalDateTime.now();</span>
+<span class="nc" id="L78">    }</span>
+
+    public Long getId() {
+<span class="fc" id="L81">        return id;</span>
+    }
+
+    public void setId(Long id) {
+<span class="fc" id="L85">        this.id = id;</span>
+<span class="fc" id="L86">    }</span>
+
+    public String getName() {
+<span class="fc" id="L89">        return name;</span>
+    }
+
+    public void setName(String name) {
+<span class="fc" id="L93">        this.name = name;</span>
+<span class="fc" id="L94">    }</span>
+
+    public String getOverview() {
+<span class="fc" id="L97">        return overview;</span>
+    }
+
+    public void setOverview(String overview) {
+<span class="fc" id="L101">        this.overview = overview;</span>
+<span class="fc" id="L102">    }</span>
+
+    public String getArchitectureDiagram() {
+<span class="fc" id="L105">        return architectureDiagram;</span>
+    }
+
+    public void setArchitectureDiagram(String architectureDiagram) {
+<span class="fc" id="L109">        this.architectureDiagram = architectureDiagram;</span>
+<span class="fc" id="L110">    }</span>
+
+    public String getBusinessRequirements() {
+<span class="fc" id="L113">        return businessRequirements;</span>
+    }
+
+    public void setBusinessRequirements(String businessRequirements) {
+<span class="fc" id="L117">        this.businessRequirements = businessRequirements;</span>
+<span class="fc" id="L118">    }</span>
+
+    public String getTechnicalDocumentation() {
+<span class="fc" id="L121">        return technicalDocumentation;</span>
+    }
+
+    public void setTechnicalDocumentation(String technicalDocumentation) {
+<span class="fc" id="L125">        this.technicalDocumentation = technicalDocumentation;</span>
+<span class="fc" id="L126">    }</span>
+
+    public String getApiDocumentation() {
+<span class="fc" id="L129">        return apiDocumentation;</span>
+    }
+
+    public void setApiDocumentation(String apiDocumentation) {
+<span class="fc" id="L133">        this.apiDocumentation = apiDocumentation;</span>
+<span class="fc" id="L134">    }</span>
+
+    public String getSetupInstructions() {
+<span class="fc" id="L137">        return setupInstructions;</span>
+    }
+
+    public void setSetupInstructions(String setupInstructions) {
+<span class="fc" id="L141">        this.setupInstructions = setupInstructions;</span>
+<span class="fc" id="L142">    }</span>
+
+    public ProjectStage getStage() {
+<span class="fc" id="L145">        return stage;</span>
+    }
+
+    public void setStage(ProjectStage stage) {
+<span class="fc" id="L149">        this.stage = stage;</span>
+<span class="fc" id="L150">    }</span>
+
+    public List&lt;User&gt; getAssignedEmployees() {
+<span class="fc" id="L153">        return assignedEmployees;</span>
+    }
+
+    public void setAssignedEmployees(List&lt;User&gt; assignedEmployees) {
+<span class="nc" id="L157">        this.assignedEmployees = assignedEmployees;</span>
+<span class="nc" id="L158">    }</span>
+
+    public User getProjectManager() {
+<span class="fc" id="L161">        return projectManager;</span>
+    }
+
+    public void setProjectManager(User projectManager) {
+<span class="nc" id="L165">        this.projectManager = projectManager;</span>
+<span class="nc" id="L166">    }</span>
+
+    public LocalDateTime getCreatedAt() {
+<span class="nc" id="L169">        return createdAt;</span>
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+<span class="nc" id="L173">        this.createdAt = createdAt;</span>
+<span class="nc" id="L174">    }</span>
+
+    public LocalDateTime getUpdatedAt() {
+<span class="nc" id="L177">        return updatedAt;</span>
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+<span class="nc" id="L181">        this.updatedAt = updatedAt;</span>
+<span class="nc" id="L182">    }</span>
+} 
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

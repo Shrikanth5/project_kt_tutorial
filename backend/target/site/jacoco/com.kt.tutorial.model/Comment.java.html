@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Comment.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">kt-tutorial</a> &gt; <a href="index.source.html" class="el_package">com.kt.tutorial.model</a> &gt; <span class="el_source">Comment.java</span></div><h1>Comment.java</h1><pre class="source lang-java linenums">package com.kt.tutorial.model;
+
+import jakarta.persistence.*;
+import lombok.Data;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.time.LocalDateTime;
+
+<span class="nc bnc" id="L11" title="All 54 branches missed.">@Data</span>
+@Entity
+@Table(name = &quot;comments&quot;)
+@EntityListeners(AuditingEntityListener.class)
+public class Comment {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+<span class="nc" id="L18">    private Long id;</span>
+
+    @Column(nullable = false)
+<span class="nc" id="L21">    private String content;</span>
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = &quot;project_id&quot;, nullable = false)
+<span class="nc" id="L25">    private Project project;</span>
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = &quot;author_id&quot;, nullable = false)
+<span class="nc" id="L29">    private User author;</span>
+
+    @CreatedDate
+    @Column(nullable = false, updatable = false)
+<span class="nc" id="L33">    private LocalDateTime createdAt;</span>
+
+    @LastModifiedDate
+    @Column(nullable = false)
+<span class="nc" id="L37">    private LocalDateTime updatedAt;</span>
+} 
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

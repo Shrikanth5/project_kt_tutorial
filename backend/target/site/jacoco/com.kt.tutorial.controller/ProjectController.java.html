@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ProjectController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">kt-tutorial</a> &gt; <a href="index.source.html" class="el_package">com.kt.tutorial.controller</a> &gt; <span class="el_source">ProjectController.java</span></div><h1>ProjectController.java</h1><pre class="source lang-java linenums">package com.kt.tutorial.controller;
+
+import com.kt.tutorial.dto.ProjectDTO;
+import com.kt.tutorial.service.ProjectService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping(&quot;/api/projects&quot;)
+<span class="fc" id="L14">@RequiredArgsConstructor</span>
+public class ProjectController {
+    private final ProjectService projectService;
+
+    @PostMapping
+    public ResponseEntity&lt;ProjectDTO&gt; createProject(@RequestBody ProjectDTO projectDTO) {
+<span class="fc" id="L20">        return new ResponseEntity&lt;&gt;(projectService.createProject(projectDTO), HttpStatus.CREATED);</span>
+    }
+
+    @GetMapping
+    public ResponseEntity&lt;List&lt;ProjectDTO&gt;&gt; getAllProjects() {
+<span class="fc" id="L25">        return ResponseEntity.ok(projectService.getAllProjects());</span>
+    }
+
+    @GetMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;ProjectDTO&gt; getProjectById(@PathVariable Long id) {
+<span class="fc" id="L30">        return ResponseEntity.ok(projectService.getProjectById(id));</span>
+    }
+
+    @PutMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;ProjectDTO&gt; updateProject(@PathVariable Long id, @RequestBody ProjectDTO projectDTO) {
+<span class="fc" id="L35">        return ResponseEntity.ok(projectService.updateProject(id, projectDTO));</span>
+    }
+
+    @DeleteMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;Void&gt; deleteProject(@PathVariable Long id) {
+<span class="fc" id="L40">        projectService.deleteProject(id);</span>
+<span class="fc" id="L41">        return ResponseEntity.noContent().build();</span>
+    }
+} 
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

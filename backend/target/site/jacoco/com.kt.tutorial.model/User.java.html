@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>User.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">kt-tutorial</a> &gt; <a href="index.source.html" class="el_package">com.kt.tutorial.model</a> &gt; <span class="el_source">User.java</span></div><h1>User.java</h1><pre class="source lang-java linenums">package com.kt.tutorial.model;
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import lombok.Data;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+<span class="pc bnc" id="L20" title="All 66 branches missed.">@Data</span>
+@Entity
+@Table(name = &quot;users&quot;)
+@EntityListeners(AuditingEntityListener.class)
+public class User implements UserDetails {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @NotBlank
+    @Column(nullable = false)
+    private String name;
+
+    @NotBlank
+    @Email
+    @Column(nullable = false, unique = true)
+    private String email;
+
+    @NotBlank
+    @Column(nullable = false)
+    private String password;
+
+<span class="fc" id="L42">    @ElementCollection(fetch = FetchType.EAGER)</span>
+    @CollectionTable(name = &quot;user_roles&quot;, joinColumns = @JoinColumn(name = &quot;user_id&quot;))
+    @Column(name = &quot;role&quot;)
+    private Set&lt;String&gt; roles = new HashSet&lt;&gt;();
+
+<span class="fc" id="L47">    private boolean enabled = true;</span>
+
+    @CreatedDate
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @LastModifiedDate
+    @Column(nullable = false)
+    private LocalDateTime updatedAt;
+
+    @Override
+    public Collection&lt;? extends GrantedAuthority&gt; getAuthorities() {
+<span class="fc" id="L59">        return roles.stream()</span>
+<span class="pc" id="L60">                .map(role -&gt; new SimpleGrantedAuthority(&quot;ROLE_&quot; + role))</span>
+<span class="fc" id="L61">                .collect(Collectors.toSet());</span>
+    }
+
+    @Override
+    public String getUsername() {
+<span class="fc" id="L66">        return email;</span>
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+<span class="fc" id="L71">        return true;</span>
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+<span class="fc" id="L76">        return true;</span>
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+<span class="fc" id="L81">        return true;</span>
+    }
+
+    @Override
+    public boolean isEnabled() {
+<span class="fc" id="L86">        return enabled;</span>
+    }
+
+    public Long getId() {
+<span class="fc" id="L90">        return id;</span>
+    }
+
+    public void setId(Long id) {
+<span class="fc" id="L94">        this.id = id;</span>
+<span class="fc" id="L95">    }</span>
+
+    public String getName() {
+<span class="fc" id="L98">        return name;</span>
+    }
+
+    public void setName(String name) {
+<span class="fc" id="L102">        this.name = name;</span>
+<span class="fc" id="L103">    }</span>
+
+    public String getEmail() {
+<span class="fc" id="L106">        return email;</span>
+    }
+
+    public void setEmail(String email) {
+<span class="fc" id="L110">        this.email = email;</span>
+<span class="fc" id="L111">    }</span>
+
+    @Override
+    public String getPassword() {
+<span class="fc" id="L115">        return password;</span>
+    }
+
+    public void setPassword(String password) {
+<span class="fc" id="L119">        this.password = password;</span>
+<span class="fc" id="L120">    }</span>
+
+    public Set&lt;String&gt; getRoles() {
+<span class="fc" id="L123">        return roles;</span>
+    }
+
+    public void setRoles(Set&lt;String&gt; roles) {
+<span class="fc" id="L127">        this.roles = roles;</span>
+<span class="fc" id="L128">    }</span>
+
+    public void setEnabled(boolean enabled) {
+<span class="fc" id="L131">        this.enabled = enabled;</span>
+<span class="fc" id="L132">    }</span>
+
+    public LocalDateTime getCreatedAt() {
+<span class="fc" id="L135">        return createdAt;</span>
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+<span class="fc" id="L139">        this.createdAt = createdAt;</span>
+<span class="fc" id="L140">    }</span>
+
+    public LocalDateTime getUpdatedAt() {
+<span class="fc" id="L143">        return updatedAt;</span>
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+<span class="fc" id="L147">        this.updatedAt = updatedAt;</span>
+<span class="fc" id="L148">    }</span>
+} 
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
