@@ -24,18 +24,6 @@ The architecture documentation (`architecture/ARCHITECTURE.md`) provides:
 - Deployment architecture
 - Quality assurance architecture
 
-### Quality Checks Documentation
-The quality checks documentation (`quality/QUALITY_CHECKS.md`) covers:
-- Testing strategy
-- Code quality metrics
-- Quality gates
-- Monitoring and metrics
-- Security quality checks
-- Documentation requirements
-- CI/CD pipeline
-- Performance testing
-- Accessibility standards
-
 ## How to Use This Documentation
 
 1. Start with the architecture documentation to understand the system design
